@@ -92,7 +92,7 @@ export default function Dashboard() {
               label="Age"
               onChange={handleChange}
             >
-              <MenuItem value={"#000000"}>Dark</MenuItem>
+              <MenuItem value={"#00000"}>Dark</MenuItem>
               <MenuItem value={"#0000FF"}>Blue</MenuItem>
               <MenuItem value={"#800080"}>Purple</MenuItem>
             </Select>

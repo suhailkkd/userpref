@@ -5,12 +5,12 @@ npm install --prod
 npm run build
 
 echo "building server"
-cd ../server/
+cd ../
 npm install --prod
 
 
 echo "bundlind client to server"
 rm -rf public
 mkdir -p public
-cp -r ../client/build public/
+cp -r client/build public/
 

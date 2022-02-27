@@ -9,13 +9,12 @@ Clone this [repo](https://github.com/suhailkkd/userpref.git)
 ##run from terminal
 git clone https://github.com/suhailkkd/userpref.git
 
-sh build.sh
+npm run build
+npm run server
 
 cd client
 npm start
 
-cd server
-npm run server
 
 ```
 
