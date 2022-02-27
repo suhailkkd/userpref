@@ -11,12 +11,11 @@ var usersRouter = require('./routes/users');
 
 var db = require('./db/db')
 const passport = require("passport");
+const { graphqlHTTP } = require('express-graphql');
 
 var app = express();
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
+const schema = require('./schema/schema');
 
 
 app.use(
@@ -36,6 +35,10 @@ app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 app.use('/users', usersRouter);
+app.use('/graphql',graphqlHTTP({
+  graphiql: true,
+  schema: schema
+}))
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/build', 'index.html'));
 });
