@@ -45,6 +45,8 @@ export default function Dashboard() {
   React.useEffect(() => {
     if (data && data.color) {
       dispatch(fetchColor(data.color));
+    } else {
+      dispatch(fetchColor('#00000'));
     }
   }, [data]);
 
