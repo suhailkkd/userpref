@@ -17,6 +17,9 @@ import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Container from "@mui/material/Container";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchColor, editColorPreference,signOut } from "../actions";
+import { GithubPicker } from 'react-color';
 function appBarLabel(label) {
   return (
     <>
@@ -29,9 +32,11 @@ function appBarLabel(label) {
     </>
   );
 }
-
 export default function Dashboard() {
-  const [color, setColor] = React.useState("#00000");
+  const { color } = useSelector((state) => state.preference);
+  const { userId } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   const { isLoading, error, data } = useQuery("colordata", () =>
     api
       .get(`/preference/${localStorage.getItem("user")}`)
@@ -39,7 +44,7 @@ export default function Dashboard() {
   );
   React.useEffect(() => {
     if (data && data.color) {
-      setColor(data.color);
+      dispatch(fetchColor(data.color));
     }
   }, [data]);
 
@@ -59,24 +64,22 @@ export default function Dashboard() {
         main: color,
       },
     },
+      typography: {
+        poster: {
+          color: color,
+        },
+        h3: undefined,
+      },
   });
 
   const logout = () => {
     localStorage.clear();
     history.push("/");
+    dispatch(signOut())
   };
+
   const handleChange = (event) => {
-    setColor(event.target.value);
-    api
-      .post(`/preference/${localStorage.getItem("user")}`, {
-        color: event.target.value,
-      })
-      .then((res) => {
-        toast("Successfully saved your color preference");
-      })
-      .catch((err) => {
-        toast("failed to save your preference");
-      });
+    dispatch(editColorPreference(event.target.value));
   };
 
   return (
@@ -84,8 +87,8 @@ export default function Dashboard() {
       <ThemeProvider theme={darkTheme}>
         <AppBar position="static" color="primary" enableColorOnDark>
           <Toolbar>
-            {appBarLabel(localStorage.getItem("user"))}
-            <Select
+            {appBarLabel(userId)}
+            {/* <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={color}
@@ -95,14 +98,15 @@ export default function Dashboard() {
               <MenuItem value={"#00000"}>Dark</MenuItem>
               <MenuItem value={"#0000FF"}>Blue</MenuItem>
               <MenuItem value={"#800080"}>Purple</MenuItem>
-            </Select>
+            </Select> */}
+            <GithubPicker color={color} onChangeComplete={(color) => dispatch(editColorPreference(color.hex))}/>
             <Button onClick={logout} color="inherit">
               Logout
             </Button>
           </Toolbar>
         </AppBar>
-        <Container maxWidth="sm">
-          Welcome {localStorage.getItem("user")}
+        <Container maxWidth="sm" >
+          <Typography variant="poster">Welcome {userId}</Typography>
         </Container>
       </ThemeProvider>
       <ToastContainer />

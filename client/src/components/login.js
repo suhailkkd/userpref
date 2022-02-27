@@ -10,10 +10,16 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import api from "../apis/users";
 import history from "../history";
+import { signIn } from "../actions";
+import { useDispatch } from "react-redux";
+import {Link} from 'react-router-dom';
+import Grid from '@mui/material/Grid';
 
 const theme = createTheme();
 
 export default function SignIn() {
+
+  const dispatch = useDispatch()
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -21,14 +27,7 @@ export default function SignIn() {
       email: data.get("email"),
       password: data.get("password"),
     };
-    api
-      .post("/login", payload)
-      .then((res) => {
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("user", payload.email);
-        history.push('/dashboard')
-      })
-      .catch((err) => console.error(err));
+    dispatch(signIn(payload))
   };
 
   return (
@@ -83,6 +82,13 @@ export default function SignIn() {
             >
               Sign In
             </Button>
+            <Grid container>
+              <Grid item>
+                <Link to="/signup" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
           </Box>
         </Box>
       </Container>
