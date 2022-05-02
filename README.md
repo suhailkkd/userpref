@@ -1,5 +1,5 @@
 # userpref
-User preference
+User preference 
 
 # Local Setup
 Clone this [repo](https://github.com/suhailkkd/userpref.git)
